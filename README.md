@@ -1,16 +1,120 @@
-## Hi there 👋
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Tecido Interativo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!--
-**ThiagoJson/ThiagoJSon** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #0e0e0e;
+    overflow: hidden;
+  }
 
-Here are some ideas to get you started:
+  canvas {
+    display: block;
+  }
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+  .back {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    color: #9a9a9a;
+    font-family: system-ui, sans-serif;
+    text-decoration: none;
+    font-size: 0.9rem;
+    z-index: 10;
+  }
+
+  .back:hover {
+    color: #4f9cff;
+  }
+</style>
+</head>
+
+<body>
+
+<a href="index.html" class="back">← voltar</a>
+<canvas id="fabric"></canvas>
+
+<script>
+const canvas = document.getElementById("fabric");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+let mouse = {
+  x: canvas.width / 2,
+  y: canvas.height / 2,
+  down: false,
+  active: false
+};
+
+document.addEventListener("mousemove", e => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+  mouse.active = true;
+});
+
+document.addEventListener("mousedown", () => mouse.down = true);
+document.addEventListener("mouseup", () => mouse.down = false);
+document.addEventListener("mouseleave", () => mouse.active = false);
+
+const points = [];
+const spacing = 20;
+
+for (let y = 0; y < canvas.height; y += spacing) {
+  for (let x = 0; x < canvas.width; x += spacing) {
+    points.push({
+      x, y,
+      ox: x, oy: y,
+      vx: 0, vy: 0
+    });
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  points.forEach(p => {
+    // retorno
+    p.vx += (p.ox - p.x) * 0.02;
+    p.vy += (p.oy - p.y) * 0.02;
+
+    if (mouse.active) {
+      const dx = mouse.x - p.x;
+      const dy = mouse.y - p.y;
+      const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+
+      let force = Math.max(0, 120 - dist) * 0.02;
+      if (mouse.down) force = 2.5;
+
+      p.vx += (dx / dist) * force;
+      p.vy += (dy / dist) * force;
+    }
+
+    p.vx *= 0.88;
+    p.vy *= 0.88;
+
+    p.x += p.vx;
+    p.y += p.vy;
+
+    ctx.fillStyle = "#4f9cff";
+    ctx.fillRect(p.x, p.y, 2, 2);
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+
+</body>
+</html>
