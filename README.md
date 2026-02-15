@@ -10,7 +10,7 @@ Efeito visual interativo criado com **HTML5 Canvas + JavaScript**, simulando um 
 
 ## 🚀 Demonstração ao vivo
 👉 **Clique para interagir**
-🔗 https://thiagoseo.github.io
+🔗 https://thiagojson.github.io
 
 ---
 
@@ -31,4 +31,4 @@ Efeito visual interativo criado com **HTML5 Canvas + JavaScript**, simulando um 
 
 ## 👤 Autor
 **Thiago Martins**  
-🔗 https://github.com/ThiagoSEO
+🔗 https://github.com/ThiagoJson
